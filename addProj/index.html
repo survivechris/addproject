@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html ng-app="urpoApp">
+  <head>
+    <style>
+      pre {
+          display: block;
+          font-family: monospace;
+          white-space: pre;
+          margin: 1em 0;
+      } 
+      td {
+          text-align: left;
+      }
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URPO project</title>
+    <!-- Bootstrap 3 css -->
+   
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- Angular.js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <!-- Angular-xeditable -->
+    <link href="angular-xeditable/css/xeditable.css" rel="stylesheet">
+    <script src="angular-xeditable/js/xeditable.js"></script>
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!-- connect the fake DB -->
+    <script src="angular-xeditable/js/urpo_tempDB.js"></script>
+    <script src='angular-xeditable/js/urpo_tempServer.js'></script>
+    
+    <!-- app.js -->
+    <script src="app.js"></script>
+  </head>
+  <body style="padding: 20px">
+    <h1 style="margin-bottom: 20px">加入/修改專案</h1>
+    <div ng-controller="MainCtrl" class="form-group">
+<!-- first part of the must filled out table -->
+      <table style="width:53%">
+        <tr>
+          <td>專案名稱:<a href="#" editable-text="project.Project_Name" e-ng-model="project.Project_Name">{{ project.Project_Name || "empty" }}</a>
+          <td>
+            <div id="addingInvest" ng-controller="AddInvestController">
+              主要研究員與聯絡方式:
+              <ul>
+                <li ng-repeat="Principal_Investigator in project.Principal_Investigators">
+                  <input type="text" ng-model="Principal_Investigator.Name" aria-labelledby="investor_{{$index}}"/>
+                  <input type="text" ng-model="Principal_Investigator.Email" aria-labelledby="investor_{{$index}}"/>
+                  <button class="btn" ng-click="removeInvest(Principal_Investigator)"> X </button>
+                </li>
+                <button class="btn" ng-click="addInvest()">add</button>
+              </ul>
+            </div>
+        </tr>
+        <tr>
+          <td>合作學校:<a href="#" editable-text="project.Institution" e-ng-model="project.Institution">{{ project.Institution || "empty" }}</a>
+          <td>
+              <div id="addingHost" ng-controller="AddHostController">
+                計畫主持人:
+                <ul>
+                  <li ng-repeat="Project_Owner in project.Project_Owners">
+                    <input type="text" ng-model="Project_Owner.Name" aria-labelledby="owner_{{$index}}"/>
+                    <button class="btn" ng-click="removeOwner(Project_Owner)"> X </button>
+                  </li>
+                  <button class="btn" ng-click="addOwner()">add</button>
+                </ul>
+              </div>
+
+        </tr>
+      </table>
+<!-- END OF first part of the must filled out table -->
+<!-- second part of the optional table -->
+ 
+
+
+      <table style="width:53%">
+        <tr>
+          <td>開始日期: <input class="form-control" type="text" id="dateStart" ng-blur='setStartDate()' ng-click="showCalenderStart()" >
+                 <p>{{project.Estimated_Start_Date}}</p>
+            <!-- <p ng-bind="project.Estimated_Start_Date"></p> -->
+          <td><!--部門(改下拉選單):<a href="#" editable-text="project.Dept">{{ project.Dept || "empty" }}</a>-->
+            部門:
+            <select class="form-control" id="selCurrency">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+        </tr>
+        <tr>
+          <td>結束日期: <input class="form-control" type="text" id="dateEnd" ng-click="showCalenderEnd()" ng-click="showCalenderEnd()">
+          <td>地區<a href="#" editable-text="project.Region">{{ project.Region || "empty" }}</a>
+        </tr>
+        <tr>
+          <td>分類:<a href="#" editable-text="project.Category">{{ project.Category || "empty" }}</a>
+          <td>技術類別:<a href="#" editable-text="project.Competence">{{ project.Competence || "empty" }}</a>
+        </tr>
+        <tr>
+          <td>
+            <!--合作模式(改下拉選單):<a href="#" editable-text="project.Collaboration_Model">{{ project.Collaboration_Model || "empty" }}</a>-->
+            合作模式
+            <select class="form-control" id="selModel">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+          <td>
+           <!--合約階段(改下拉選單):<a href="#" editable-text="project.Project_Agreement_Status">{{ project.Project_Agreement_Status || "empty" }}</a>-->
+            合約階段
+            <select class="form-control" id="selStatus">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+        </tr>
+        <tr>
+          <td><!--幣制(改下拉選單):<a href="#" editable-text="project.Currency">{{ project.Currency || "empty" }}</a>-->
+            幣制:
+            <select class="form-control" id="selCurrency">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+          <td>預計總金額:<a href="#" editable-text="project.Cash_Funding">{{ project.Cash_Funding || "empty" }}</a>
+        </tr>
+      </table>
+<!-- END OF second part of the optional table -->
+      <p>專案描述:
+        <a href="#" editable-textarea="project.Project_Description" e-rows="7" e-cols="80">
+          <pre>{{ project.Project_Description || 'no description' }}</pre>
+        </a>
+      </p>
+      <p>備註/備忘:
+        <a href="#" editable-textarea="project.memo" e-rows="7" e-cols="80">
+          <pre>{{ project.memo || 'no description' }}</pre>
+        </a>
+      </p>
+      <button class="btn" ng-click="checkValid()">add project</button>
+    </div>
+  </body>
+</html>
